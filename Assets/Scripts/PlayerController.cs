@@ -5,8 +5,9 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f;  // Movement speed (editable in Inspector)
     private Rigidbody rb;
 
-    // New score variable
-    private int score = 0; // Initial score
+    // Score and health variables
+    private int score = 0;       // Initial score
+    public int health = 5;       // Initial health
 
     void Start()
     {
@@ -27,17 +28,21 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(movement * speed);
     }
 
-    // Detect collision with coins
     void OnTriggerEnter(Collider other)
     {
+        // Handle coin pickup
         if (other.CompareTag("Pickup"))
         {
             score++; // Increment score
-            Debug.Log("Score: " + score); // Print score to console
+            Debug.Log("Score: " + score); // Log score
+            other.gameObject.SetActive(false); // Disable coin
+        }
 
-            // Disable or destroy the coin
-            other.gameObject.SetActive(false);
-            // OR: Destroy(other.gameObject);
+        // Handle trap collision
+        if (other.CompareTag("Trap"))
+        {
+            health--; // Decrease health
+            Debug.Log("Health: " + health); // Log health
         }
     }
 }
