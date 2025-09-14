@@ -3,8 +3,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;  // Movement speed (editable in Inspector)
-
     private Rigidbody rb;
+
+    // New score variable
+    private int score = 0; // Initial score
 
     void Start()
     {
@@ -23,5 +25,19 @@ public class PlayerController : MonoBehaviour
 
         // Apply force to Rigidbody for smooth movement
         rb.AddForce(movement * speed);
+    }
+
+    // Detect collision with coins
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Pickup"))
+        {
+            score++; // Increment score
+            Debug.Log("Score: " + score); // Print score to console
+
+            // Disable or destroy the coin
+            other.gameObject.SetActive(false);
+            // OR: Destroy(other.gameObject);
+        }
     }
 }
